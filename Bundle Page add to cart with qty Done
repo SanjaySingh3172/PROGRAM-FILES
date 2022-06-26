@@ -1,0 +1,135 @@
+ 
+ 
+<div class="container" style="margin-bottom:100px;">
+  <div class="limespot-box">
+    {% if section.settings.text_p %}
+<h3 class="ls-box-title">{{ section.settings.text_p }}</h3>
+   {% endif %}
+  <div class="limespot-recommendation-box-carousel-container">
+<!--    <form action="/cart/add" method="post" class="product-form" id="add-to-cart"> -->
+     <div class="ls-ul-container ">
+       <ul class="{%comment%}cslider{%endcomment%} ls-ul " style="display: flex;">       
+         {% for product in collections[section.settings.products_featured_collection].products %} 
+         <li class="limespot-recommendation-box-item" >
+<!--             <a href="/cart" id="cart-number">View cart : {{cart.item_count}}</a>    -->
+           <input class="variantid" type="checkbox" name="{{ product.title }}" {% for variant in product.variants %} variantid="{{ variant.id }}"{% endfor %}>
+      <a class="ls-link" href="#{%comment%}{{ product.url }}{%endcomment%}">
+              <div class="ls-image-wrap" >
+           <img class="ls-image" src="{{ product.featured_image | img_url:'1000x' }}" alt="{{ product.featured_image.alt }}">
+          </div>
+              <div class="ls-price-wrap">
+                {{ product.title }}
+                  <span class=" money"  data-money-convertible="">{{ product.price  | money_with_currency}}</span>
+                 <span class="price" data-money-convertible="">{{ product.compare_at_price  | money_with_currency}}</span>
+              </div>
+             
+            </a>
+           <input type="number" class="quantity" id="quantity" name ="quantity" value="2" style="width: 100%;"> 
+          </li>
+         {% endfor %}
+        </ul>
+      
+    </div>
+<!--     </form> --><br>
+   <input type="button" id="add-to-cart-button" value="ADD TO CART" onClick="addToCart()" style="width: 100%;">       
+ 
+    
+       
+ <div class="checked-results"style="margin-bottom:100px;display:none;"> 
+   <ul class="checked-main"></ul>  
+  </div> 
+    
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% schema %}
+ {
+    "name": "Bundle Collection",
+    "settings": [
+      {
+          "type": "text",
+          "id": "text_p",
+          "label": {
+            "en": "text"
+          }
+        },
+        {
+        "type": "collection",
+        "id": "products_featured_collection",
+        "label": {
+            "en": "Featured products in sidebar"
+          }
+        }
+  ]
+  }
+
+
+{% endschema %}
+      
+
+<script>
+  
+  var ids = [];
+ $('input.variantid').click(function() {
+     var checked = $(this).attr("variantid"); 
+    var btnid = 'addItemToCart('+checked+')';
+  // console.log(checked);
+    if ($('input.variantid').is(':checked')) {
+      $("ul.checked-main").append('<li class="checkedall">'+ checked +'</li>');
+    //  $("#add-to-cart-button").attr("onClick",btnid);
+    }
+    code = $(this).attr('variantid');
+  // console.log(code);
+   ids.push(code);
+   // console.log(ids);
+   
+  });
+ 
+ $(".quantity").change(function(){
+     var crntqty = $(this).val();
+     //alert(crntqty);
+   $(this).attr("value",crntqty);
+   }); 
+function addToCart() {
+   
+   var array = [];
+ $('input[type="checkbox"]:checked').each(function() {
+    
+   var qtty = $(this).parent("li.limespot-recommendation-box-item").find("#quantity").attr("value");
+    //alert(qtty);
+   var VarID = $(this).attr("variantid");
+   var toPushItem = VarID+'-'+qtty;
+          	array.push(toPushItem);
+   //alert(array);
+   
+   //array.push(VarID);
+});
+  
+ for(var i = 0; i <= array.length; i++) {
+    //console.log(array);
+   var formContents = array[i].split('-');
+   console.log(formContents);
+      {           
+          $.ajax({
+              type:"POST",
+              url:"/cart/add.js",
+            //data: 'quantity='+formContents[1]+'&id='+formContents[0],
+            data: 'quantity='+formContents[1]+'&id='+formContents[0],
+              async:false,
+              success:function(){
+                window.location.href = '/cart'; 
+           // alert("Item added to cart");
+              }
+            });
+      }
+ }
+}
+
+
+
+</script>  

@@ -1,0 +1,311 @@
+<div class="col-md-2 col-sm-3">
+  <div class="filterheading"><h4><span class="inner--border"> Browse By :</span></h4> </div>
+  <div class="sidebar four columns">
+  <ul class="collections-list">
+   
+    {% for collection in collections  %}
+    <li><a href="{{collection.url}}">{{collection.title }}</a></li>
+    
+{% endfor %}
+    </ul>
+  </div>{% if collection.all_tags != blank %}
+  <div class="filterheading"><h4><span class="inner--border"> Filter By :</span></h4> </div>
+  <div class="sidebar four columns" >
+<!--     <div class="closeimage"><img src="https://cdn.shopify.com/s/files/1/0278/1763/t/73/assets/close_ico.png?3357512117661982476"></div> -->
+
+    
+     {% assign getpriceorder = "Under $1,$1 - $20,$21 - $50,$51 - $100,$101 - $200,$201 - $500,$501 - $1000, $1001 - $2500, $2500 - $5000, Over $5000" | split:',' %}
+    
+    {% assign filterarray = "price,size,color,designer,pricefilter" | split:',' %}
+    
+       
+
+    {% for filter in filterarray %}
+    {% if filter == 'price' %}
+    
+    
+    <div class="filter-row bow-type ">
+      <h5 class="filter-heading desktop_filter selected_filter">{{ filter }}</h5>
+      <span class="clear_btn" style="display:none;"><a class="clearfilter" href="{{ collection.url }}">Clear</a></span>
+      {% assign uniqueidentifier = filter | append:'_' %}
+      <ul class="blog_list_ubs tag_filter_ubs priceRange">
+        {% comment %} 
+        {% for sortorder in getpriceorder %}
+        {% for tag in collection.all_tags %}
+        {% if tag contains sortorder %}
+        {% if tag contains uniqueidentifier %}
+        {% assign tagnew1 = tag %}
+        {% assign tagnew2 = tagnew1 | replace:'$','-' | replace:' ','-'  %}
+        {% assign tagnew = tag | downcase %}
+        
+        <li data-tag="{{ tagnew2 | replace:'--','-' | downcase }}" 
+           class="filter--tag price {% if current_tags contains tag %}active activeliparent
+         {% endif %} tagclickprevent">
+          <input style="display:none;" data-collectionurl="{{ collection.url }}" type="checkbox" 
+                 {% if current_tags contains tag %}checked="checked"{% endif %} class="check_box 
+           {% if current_tags contains tag %}filter_checked{% endif %}" value="{{ tag | handle }}">
+          {% if current_tags contains tag %}{{ tag | remove:uniqueidentifier | link_to:collection.url | replace: 'title=', 'class="activeli" title=' }}{% else %}
+          {{ tag | remove:uniqueidentifier | link_to_tag: tag  | replace: 'title=', 'class="active--not" title=' }}
+          {% endif %}{% if current_tags contains tag %}{%endif%}{% if current_tags contains tag %}
+          <a class="cross-acrion" href="{{collection.url}}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="icon"><path fill="#444" d="M15.89 14.696l-4.734-4.734 4.717-4.717c.4-.4.37-1.085-.03-1.485s-1.085-.43-1.485-.03L9.641 8.447 4.97 3.776c-.4-.4-1.085-.37-1.485.03s-.43 1.085-.03 1.485l4.671 4.671-4.688 4.688c-.4.4-.37 1.085.03 1.485s1.085.43 1.485.03l4.688-4.687 4.734 4.734c.4.4 1.085.37 1.485-.03s.43-1.085.03-1.485z"></path></svg></a>{%else%}<a style="display:none;" class="cross-acrion" href="{{collection.url}}/{{ tag | handle }}"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="icon"><path fill="#444" d="M15.89 14.696l-4.734-4.734 4.717-4.717c.4-.4.37-1.085-.03-1.485s-1.085-.43-1.485-.03L9.641 8.447 4.97 3.776c-.4-.4-1.085-.37-1.485.03s-.43 1.085-.03 1.485l4.671 4.671-4.688 4.688c-.4.4-.37 1.085.03 1.485s1.085.43 1.485.03l4.688-4.687 4.734 4.734c.4.4 1.085.37 1.485-.03s.43-1.085.03-1.485z"></path></svg></a>
+          {%endif%}
+        </li>
+  
+        {% endif %}{% endif %}{% endfor %}{% endfor %}
+     {% endcomment %}
+        
+<!---------- Multithumb slider ---------- -->
+   {% assign priceMinMax = collection.products | sort: 'price' %}
+        {% assign max-values =  priceMinMax[-1].price_max | money|replace :"$", '' %}
+         {% assign maximum-values = max-values  %}
+        <span class="no_products"  > </span>
+        <div class="firefox_value_holder">  
+           
+        </div>
+     <div class="firefox_range">
+       
+        <div class="rangeslider">
+        
+          <input class="min" name="range_1" type="range" step="50" min="1" max="{{  maximum-values | plus: 100 }}" 
+                 value="1" />
+          <input class="max" name="range_1" type="range" step="50" min="0" max="{{  maximum-values | plus: 100 }}" 
+                 value="" />
+         <span class="currency">$ </span>   <span class="range_min light left">1</span>
+        <span class="range_max light right span_right"></span> <span class="currency-holder-right right">$ </span> 
+       
+        
+        </div>
+         
+       </div>
+<!--          -->
+      </ul>
+    </div>
+
+    
+    
+    
+   {% comment %} 
+      {{ priceMinMax[0].price_min | money|replace :"$", '' }}
+      {{ priceMinMax[-1].price_max | money|replace :"$", ''  }}
+      {% elsif filter == 'pricerange' %} 
+   {% endcomment %}
+    
+     {% elsif filter == 'pricefilter' %}
+   
+    
+    
+    
+    <div class="filter-row bow-type pricefilter">
+      <h5 class="filter-heading desktop_filter ">{{ filter }} </h5>
+      <span class="clear_btn" style="display:none;"><a class="clearfilter" href="{{ collection.url }}">Clear</a></span>
+     
+      {% assign uniqueidentifier = filter | append:'_' %}
+      <ul class="blog_list_ubs tag_filter_ubs pricerange_filter">{% for tag in collection.all_tags %}{% if tag contains uniqueidentifier %}
+        {% assign tagnew1 = tag %}{% assign tagnew2 = tagnew1 | replace:'$','-' | replace:' ','-'  %}{% assign tagnew = tag | downcase %}
+        <li data-tag="{{ tagnew2 | replace:'--','-' | downcase }}" class="filter--tag {% if current_tags contains tagnew1 %}active activeliparent{% endif %} tagclickprevent">
+          <input   id="{{tag |replace : "$",''  }}" data-collectionurl="{{ collection.url }}" 
+            type="radio" name="radio" {% if current_tags contains tag %}checked="checked"{% endif %} class="check_box 
+          {% if current_tags contains tag %}filter_checked{% endif %}" value="{{ tag | handle }}">
+          {% if current_tags contains tag %}
+          <label class="checkbox-filt"  for="{{tag}}">{{ tag | remove:uniqueidentifier | replace: 'title=', 'class="activeli" title=' }}</label>{% else %}
+          <label class="checkbox-filt" for="{{tag}}">{{ tag | remove:uniqueidentifier  }}</label>{% endif %}
+        </li>{% endif %}{% endfor %}</ul>
+    </div>
+    
+    
+    
+    
+    
+    {% else %}
+    
+    <div class="filter-row bow-type">
+      <h5 class="filter-heading desktop_filter">{{ filter }} </h5>
+      <span class="clear_btn" style="display:none;"><a class="clearfilter" href="{{ collection.url }}">Clear</a></span>
+      {% assign uniqueidentifier = filter | append:'_' %}
+      <ul class="blog_list_ubs tag_filter_ubs">{% for tag in collection.all_tags %}{% if tag contains uniqueidentifier %}{% assign tagnew1 = tag %}{% assign tagnew2 = tagnew1 | replace:'$','-' | replace:' ','-'  %}{% assign tagnew = tag | downcase %}<li data-tag="{{ tagnew2 | replace:'--','-' | downcase }}" class="filter--tag {% if current_tags contains tagnew1 %}active activeliparent{% endif %} tagclickprevent"><input   id="{{tag}}" data-collectionurl="{{ collection.url }}" type="checkbox" {% if current_tags contains tag %}checked="checked"{% endif %} class="check_box {% if current_tags contains tag %}filter_checked{% endif %}" value="{{ tag | handle }}">{% if current_tags contains tag %}<label class="checkbox-filt"  for="{{tag}}">{{ tag | remove:uniqueidentifier | replace: 'title=', 'class="activeli" title=' }}</label>{% else %}<label class="checkbox-filt" for="{{tag}}">{{ tag | remove:uniqueidentifier  }}</label>{% endif %}</li>{% endif %}{% endfor %}</ul>
+    </div>
+    
+    {% endif %}
+    {% endfor %}
+    
+    <div class="searh_btn" style="display:none;"><span>Search</span></div>
+    {% if current_tags %}
+    <div class="clear_btn" style="display:none;"><span><a href="{{ collection.url }}">Clean Search</a></span></div>
+    {% endif %}
+
+
+    <div style="display:none;" class="current-tags" data-collectionurl="{{ collection.url }}/">{% if current_tags %}
+      {% for tagcheck in current_tags %}
+      {{ tagcheck | replace:'  ',' ' | replace:' ','-' | replace:'$','-' | replace:'--','-'  | downcase }}{% unless forloop.last %}+{% endunless %}
+      {% endfor %}
+      {% else %}nothing{% endif %}
+    </div>
+
+
+
+  </div>
+  <h4 class="reset-all"><a href="{{collection.url}}">Reset all filters</a></h4>{% endif %}
+</div>
+
+<script>
+  $(document).ready(function(){
+  var max = 0;
+        
+        $('ul.blog_list_ubs.tag_filter_ubs.pricerange_filter li.filter--tag input.check_box').each (function(){
+           var range_data = $(this).attr("id");
+         // console.log(range_data);
+         var rangedata_max = (range_data).split("-").pop();
+           // console.log(rangedata_max);
+            
+         //console.log(Math.max(505, 10,));
+           max = (rangedata_max > max) ? rangedata_max : max;
+            
+            
+        });
+      
+     // console.log(Math.max(max));
+    $('.min, .max').attr("max",max);
+    $('.max').val(max);
+     $('.span_right').text(Math.max(max));
+  });
+</script>
+<script>
+  $(document).ready(function(){
+  $('input.check_box').change(function() {
+      var createurl = '';
+      $('input.check_box').each(function() {
+        var getattr = $(this).attr("value");
+        if(this.checked) {
+          if(createurl == ''){
+            createurl = getattr ;
+          }
+          else{
+          createurl = createurl ;
+          }
+        }
+             
+      });
+      
+      var newurl = "{{shop.url}}/collections/{{collection.handle}}/"
+      window.location.href = newurl + createurl;
+    });
+    
+    
+//////////// multithumb value display onchanage  ////////////
+    (function() {
+
+        function addSeparator(nStr) {
+            nStr += '';
+            var x = nStr.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + '.' + '$2');
+            }
+            return x1 + x2;
+        }
+
+        function rangeInputChangeEventHandler(e){
+            var rangeGroup = $(this).attr('name'),
+                minBtn = $(this).parent().children('.min'),
+                maxBtn = $(this).parent().children('.max'),
+                range_min = $(this).parent().children('.range_min'),
+                range_max = $(this).parent().children('.range_max'),
+                minVal = parseInt($(minBtn).val()),
+                maxVal = parseInt($(maxBtn).val()),
+                origin = $(this).context.className;
+
+            if(origin === 'min' && minVal > maxVal-50){
+                $(minBtn).val(maxVal-50);
+            }
+            var minVal = parseInt($(minBtn).val());
+            $(range_min).html( addSeparator(minVal*1) );
+
+
+            if(origin === 'max' && maxVal-50 < minVal){
+                $(maxBtn).val(50+ minVal);
+            }
+            var maxVal = parseInt($(maxBtn).val());
+            $(range_max).html(addSeparator(maxVal*1));
+        }
+
+     $('input[type="range"]').on( 'input', rangeInputChangeEventHandler);
+})();
+      
+////////////////  Range value on change     /////////////////////// 
+   
+    $('.min, .max').on('change', function() {
+//           alert( this.value );
+//       $('#maxval_range').html( $('.range_max').html() );
+//       $('#minval_range').html( $('.range_min').html() );
+      
+       var left_data = $('span.range_min.light.left').text();
+       var right_data = $('span.range_max.light.right').text();
+     
+      var final = left_data+'-'+right_data;
+      // console.log(final);
+      var  newf = ("pricefilter_" + final);
+     // console.log(newf);
+      var newf = $(this).attr("id");
+      //console.log(range_data);
+      var final_value = ("pricefilter_" +final);  
+     // console.log(final_value);
+       
+             var max = 0;
+         $('.no_products').text("No products in this range ! ").css( "color", "red" ); 
+     
+          $('ul.blog_list_ubs.tag_filter_ubs.pricerange_filter li.filter--tag input.check_box').each (function(){
+           var range_data = $(this).attr("id");
+         // console.log(range_data);
+         var rangedata_max = (range_data).split("-").pop();
+           // console.log(rangedata_max);
+            
+         //console.log(Math.max(505, 10,));
+           max = (rangedata_max > max) ? rangedata_max : max;
+            
+            if(final_value ==range_data ){
+             $("ul.blog_list_ubs.tag_filter_ubs.pricerange_filter li.filter--tag input#"+final_value).trigger('click');
+              $('.no_products').text("").css( "color", "Green" ); 
+          }
+        });
+      
+      console.log(max);
+
+        
+      
+    });
+ 
+    
+    
+//     $('.checkbox').click(function() {
+//         $(this).siblings('input:checkbox').prop('checked', false);
+//     });
+  
+///////////         ///////////////    
+$(window).load(function() {
+  var active_filter_value = $("ul.blog_list_ubs.tag_filter_ubs.pricerange_filter li.filter--tag.active.activeliparent.tagclickprevent input").attr("id");
+ //console.log(active_filter_value);
+  
+  var min_value = (active_filter_value).split('-')[0].substring(12);
+  var max_value = (active_filter_value).split("-").pop();
+    console.log(min_value);  
+    console.log(max_value); 
+  //alert("window load occurred!");
+  
+  //if ($('.min, .max').click()){
+             //alert("clicked");
+              $('.min').val(min_value);
+              $('.max').val(max_value);
+  $('span.range_min.light.left').text(min_value);
+  $('span.range_max.light.right').text(max_value);
+    //         }
+  
+ // $(".selected_filter").trigger('click');
+    
+});
+  
+    
+  });
+ </script>

@@ -1,0 +1,272 @@
+var searchAutocomplete = {
+  vars: {
+    term: '',
+    searchPath: Shopify.routes.search_url,
+    displayTimer: ''
+  },
+  init: function(){
+
+    this.unload();
+
+    // Focus state to display search results
+    $('[data-autocomplete-true]').on('focus', function() {
+      $(this).parents('[data-autocomplete-true]').find('.search__results-wrapper').show();
+    });
+
+    // Clicking outside makes the results disappear.
+    $(document).on('click focusout', function(e) {
+      if (Shopify.media_queries.large.matches) {
+        var searchForm = $(e.target).parents('.search__form');
+
+        if (searchForm.length === 0) {
+          $('[data-autocomplete-true] .search__results-wrapper').hide().removeClass('results-found');
+        }
+      }
+    });
+
+    $('[data-dropdown-rel="search"], [data-autocomplete-true] input').on('click touchstart', function(e) {
+      if (Shopify.media_queries.medium.matches) {
+        e.preventDefault();
+        e.stopPropagation();
+        var formType = $(this).closest('form').find('[name="type"]').val();
+        var position = $(document).scrollTop();
+        searchAutocomplete.showMobileSearch(formType, position);
+      }
+    });
+
+    $('.search-close').on('click touchstart', function() {
+      $('body').removeClass('is-active');
+      $('.dropdown_link').removeClass('active_link');
+      $('.dropdown_container').hide();
+      $('.mobile_nav').find('div').removeClass('open');
+      $('[data-autocomplete-true] .search__results-wrapper').hide().removeClass('results-found');
+    })
+
+    // Submit wildcard searches
+    $("[data-autocomplete-true] form").on("submit", function(e) {
+      e.preventDefault();
+      var formValue = $(this).find('input[name="q"]').val();
+      var cleanFormValue = encodeURI(formValue);
+
+      if ($(this).find('[name="type"]').length > 0) {
+        var searchType = $(this).find('[name="type"]').val();
+      } else {
+        var searchType = Shopify.theme_settings.search_option;
+      }
+
+      if (cleanFormValue == null) {
+        window.location.href = Shopify.routes.search_url + '?type=' + searchType;
+      } else {
+        window.location.href = searchAutocomplete.vars.searchPath + '?type=' + searchType + '&q=' + cleanFormValue + '*';
+      }
+    });
+
+    $('[data-autocomplete-true] form').each(function() {
+      var $this = $(this);
+      var input = $this.find('input[name="q"]');
+
+      // Adding a list for showing search results.
+      $('<div class="search__results-wrapper"><ul class="search__results"></ul></div>').appendTo($this);
+
+      input.attr('autocomplete', 'off').on('input', function() {
+        clearTimeout(searchAutocomplete.vars.displayTimer);
+        if ($(this).val().length > 3) {
+          searchAutocomplete.vars.term = $(this).val();
+          searchAutocomplete.getResults(searchAutocomplete.vars.term, $this);
+        } else {
+          $('[data-autocomplete-true] .search__results-wrapper').hide().removeClass('results-found');
+        }
+      });
+    });
+  },
+  getResults: function(term, $this) {
+
+    if ($this.find('[name="type"]').length > 0) {
+      var searchType = $this.find('[name="type"]').val();
+    } else {
+      var searchType = Shopify.theme_settings.search_option;
+    }
+
+    jQuery.getJSON("/search/suggest.json", {
+      "q": term,
+      "resources": {
+        "type": searchType,
+        "limit": Shopify.theme_settings.search_items_to_display,
+        "options": {
+          "unavailable_products": "last",
+          "fields": "title,body,variants.title,vendor,product_type,tag"
+        }
+      }
+    }).done(function(response) {
+
+      var suggestions = [
+        response.resources.results.products,
+        response.resources.results.pages,
+        response.resources.results.articles
+      ];
+
+      var filteredResults = [];
+
+      // Store results in array
+      $.each(suggestions, function(index, suggestion) {
+        if (suggestion !== undefined && suggestion.length > 0) { // Ensure suggestion exists
+          filteredResults.push(suggestion)
+        }
+      })
+
+      // Display results
+      searchAutocomplete.vars.displayTimer = setTimeout(function() {
+        searchAutocomplete.displayResults(filteredResults[0], $this);
+      }, 500)
+    });
+  },
+  displayResults: function(results, $this) {
+
+    var $resultsWrapper = $this.find('.search__results-wrapper');
+    var $resultsList = $this.find('.search__results');
+    $resultsWrapper.show();
+    $resultsList.empty();
+
+    if ($this.find('[name="type"]').length > 0) {
+      var searchType = $this.find('[name="type"]').val();
+    } else {
+      var searchType = Shopify.theme_settings.search_option;
+    }
+
+    if (results && results.length > 0) {
+      $.each(results, function(index, result) {
+
+        var link = $('<a tabindex="0"></a>').attr('href', result.url);
+        if (Shopify.routes.root_url !== '/') {
+          link = $('<a tabindex="0"></a>').attr('href', Shopify.routes.root_url + result.url);
+        }
+
+        // If result is a product
+        if (result['price']) {
+
+          function formatPrice(price) {
+            if (Currency.display_format === 'money_with_currency_format') {
+              return '<span class="money">' + Currency.symbol + price + ' ' + Currency.iso_code + '</span>';
+            } else {
+              return '<span class="money">' + Currency.symbol + price + '</span>';
+            }
+          }
+
+          if (result.available === true) {
+            if (result.compare_at_price_max > result.price_max || result.compare_at_price_min > result.price_min ) {
+              var itemPrice = formatPrice(result.price) + ' <span class="was_price">' + formatPrice(result.compare_at_price_max) + '</span>';
+            } else {
+              if (result.price > 0) {
+                if (result.price_min != result.price_max) {
+                  var itemPrice = Shopify.translation.from_text + ' ' + formatPrice(result.price);
+                } else {
+                  var itemPrice = formatPrice(result.price);
+                }
+              } else {
+                var itemPrice = Shopify.theme_settings.free_text;
+              }
+            }
+          } else {
+            var itemPrice = Shopify.theme_settings.sold_out_text;
+          }
+
+          // If result has an image
+          if (result['image']) {
+            link.append('<div class="thumbnail"><img class="lazyload transition--' + Shopify.theme_settings.image_loading_style + '" src="' + utils.addImageDimension(result['image'], '_300x') + '" /></div>');
+          }
+
+          link.append('<div class="search-title">' + result.title + '<br><span class="item-pricing price">'+ itemPrice +'</span></div>');
+
+          // If result is an article
+        } else if(result['summary_html']) {
+          if(result.image != 'NULL') {
+            link.append('<div class="thumbnail"><img class="lazyload transition--' +  Shopify.theme_settings.image_loading_style + '" src="' + utils.addImageDimension(result['image'], '_300x') + '" /></div>');
+          }
+          link.append('<div class="search-title">' + result.title + '<br><span class="item-description">'+ result.summary_html.replace(/(<([^>]+)>)/ig,"").slice(0, 25) +' </span></div>');
+
+          // If result is a page
+        } else if(result['published_at']) {
+          link.append('<div class="search-title">' + result.title + '<br><span class="item-description">'+ result.body.replace(/(<([^>]+)>)/ig,"").slice(0, 25) +' </span></div>');
+
+        }
+
+        // Wrap link and append to list
+        link.wrap('<li class="item-result"></li>');
+        $resultsList.append(link.parent());
+      });
+
+      $resultsList.prepend('<li class="all-results"><span class="search-title see-all"><a href="' + this.vars.searchPath + '?type=' + searchType + '&q=' + this.vars.term + '*"><span>' + Shopify.translation.all_results + '</span><span class="icon-right-arrow"></span></a></span></li>');
+
+      if (Currency.show_multiple_currencies || Currency.native_multi_currency) {
+        currencyConverter.init();
+      }
+
+      $resultsList.parents('.search__results-wrapper').addClass('results-found');
+
+    } else {
+      // if no results
+      var noResults = '<li class="item-result"><span class="no-results search-title">' + Shopify.translation.no_results + '</span></li>';
+      $resultsList.append(noResults);
+      $resultsList.parents('.search__results-wrapper').removeClass('results-found');
+    }
+
+    $resultsList.show();
+  },
+  showMobileSearch: function(formType, position) {
+    $('body').css('max-height', window.innerHeight);
+
+    $('.mobile-search').fadeIn(200);
+
+    if(/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+      $('.mobile-search input#q').focus();
+    } else {
+      //Set delay to ensure focus triggers on android
+      setTimeout(function() {
+        $('.mobile-search input#q').focus();
+      }, 205);
+    }
+
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + position + 'px';
+    $('.mobile-search').css('top', position)
+
+    var searchHeight = window.innerHeight - 60; //Full screen height - form height
+    $('.mobile-search .search__results-wrapper').css('max-height', searchHeight)
+
+    if (formType) {
+      $('.mobile-search [name="type"]').val(formType);
+    } else {
+      $('.mobile-search [name="type"]').val(Shopify.theme_settings.search_option);
+    }
+
+    $('.search-form .close-search').on('click touchstart', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      searchAutocomplete.hideMobileSearch(position);
+      $('[data-autocomplete-true] .search__results-wrapper').hide().removeClass('results-found');
+    });
+
+    $('.search-form .submit-search').on('click touchstart', function(e) {
+      $(this).parents('form').submit();
+    });
+  },
+  hideMobileSearch: function(position) {
+    $('body').css('max-height', 'none');
+
+    document.body.style.position = '';
+    document.body.style.top = '';
+    window.scrollTo(0, position);
+
+    $('.mobile-search').fadeOut(200);
+    $('.mobile-search [name="q"]').val('');
+
+    $('body').off('focus', '.search-form .close-search');
+    $('body').off('focus', '.search-form .submit-search');
+  },
+  unload: function() {
+    $('body').off('focus', '[data-autocomplete-true] input');
+    $('input[name="q"]').off();
+    $('[data-dropdown-rel="search"], [data-autocomplete-true] input').off();
+    $('.search__results-wrapper').remove();
+  }
+}

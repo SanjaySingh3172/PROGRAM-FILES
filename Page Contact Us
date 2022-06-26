@@ -1,0 +1,364 @@
+{% if section.settings.page_title_enable or section.settings.page_content_enable %}
+  <div class="page-width page-content{% if section.blocks.size > 0 %} page-content--with-blocks{% endif %} contact-us-page-main">
+
+    <div class="grid">
+      <div class="grid__item medium-up--three-quarters medium-up--push-one-eighth">
+        {%- render 'breadcrumbs' -%}
+
+        {% if section.settings.page_title_enable %}
+          <header class="section-header">
+            <h1 class="section-header__title">{{ page.title }}</h1>
+          </header>
+        {% endif %}
+
+        {% if section.settings.page_content_enable %}
+          <div class="rte text-spacing">
+            {{ page.content }}
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div class="page-blocks-container upper-page-block">
+   <div class="page-blocks">
+  {% if section.settings.eight_points_narrow_column %}
+      <div style="margin: auto;" class="{% if section.settings.eight_points_narrow_column %} medium-up--three-quarters medium-up--push-one-eighth  medium-up--three-quarters-less medium-up--push-one-eighth-less{% endif %}">
+  {% endif %}
+   <div class="page-blocks-container">
+        {% for block in section.blocks %}
+     {% case block.type %}
+         
+      <div {{ block.shopify_attributes }} class="page-blocks-main">
+           
+        
+          {% when 'text-and-image' %}
+            {% include 'page-block-text-and-image' %}
+          
+        {% when 'contact-form' %}
+            {% comment %} {% include 'page-block-contact-form' %} {% endcomment %}
+        
+        
+        {%- assign blockId = block.id -%}
+{% if product %}
+  {%- assign blockId = block.id | append: product.id -%}
+{% endif %}
+
+<div class="index-section">
+  <div class="page-width">
+
+    <div class="grid">
+      <div class="grid__item{% if block.settings.narrow_column %} medium-up--three-quarters medium-up--push-one-eighth{% endif %}">
+        {% if block.settings.title != blank %}
+          <div class="section-header">
+            <h2 class="section-header__title">
+              {{ block.settings.title }}
+            </h2>
+          </div>
+        {% endif %}
+     
+         
+
+        <div class="form-vertical">
+          {% form 'contact' %}
+
+            {% if form.posted_successfully? %}
+              {% comment %}
+              	<p class="note note--success">
+                {{ 'contact.form.post_success' | t }}
+              	</p>
+          		{% endcomment %}
+          	<script>
+				window.location = "/pages/thank-you-for-contacting-us";
+			</script>
+            {% endif %}
+
+            {{ form.errors | default_errors }}
+
+            <div class="grid grid--small">
+              <div class="grid__item medium-up--one-half">
+                <label for="ContactFormName-{{ blockId }}">{% comment %}{{ 'contact.form.name' | t }}{% endcomment %}First Name*</label>
+                <input required type="text" id="ContactFormName-{{ blockId }}" class="input-full" name="contact[First Name]" autocapitalize="words" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+              </div>
+           {% if block.settings.show_phone %}
+              <div class="grid__item medium-up--one-half">
+               
+                  <label for="ContactFormPhone-{{ blockId }}">{% comment %}{{ 'contact.form.phone' | t }}{% endcomment %}Contact Number*</label>
+                  <input required type="tel" id="ContactFormPhone-{{ blockId }}" class="input-full" name="contact[Contact Number]" pattern="[+]?[0-9\-]*" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+          
+              </div>
+              {% endif %}
+            </div>
+          
+                <label for="ContactFormEmail-{{ blockId }}">{% comment %}{{ 'contact.form.email' | t }}{% endcomment %}Email Address*</label>
+                <input required type="email" id="ContactFormEmail-{{ blockId }}" class="input-full" name="contact[email]" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+          
+
+            <label for="ContactFormMessage-{{ blockId }}">{% comment %}{{ 'contact.form.message' | t }}{% endcomment %}Your message*</label>
+            <textarea required rows="5" id="ContactFormMessage-{{ blockId }}" class="input-full" name="contact[Message]" maxlength="500">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+            <!--input type="checkbox" id="ContactFormIct" name="contact[Ict]" value="Yes"/> I want to make an ICT demo.<br/-->
+            <button type="submit" class="btn">
+             Send message {% comment %}  {{ 'contact.form.send' | t }}{% endcomment %}
+            </button>
+
+            {% comment %}
+              Remove the following three lines of code to remove the note
+              about being protected by Google's reCAPTCHA service.
+              By removing it, the small reCAPTCHA widget will appear in the
+              bottom right corner of the page.
+            {% endcomment %}
+            <div class="site-protected-info"> {{ 'shopify.online_store.spam_detection.disclaimer_html' | t }}</div>
+
+          {% endform %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        
+
+
+        {% endcase %}
+      </div>
+    {% endfor %}
+        </div>
+  {% if sections.settings.eight_points_narrow_column %}
+    </div>
+  {% endif %}
+</div>
+
+</div>
+<div class="contact-us-page-bottom-main">
+<div class="bottom-blocks-main-bottomm "> 
+<div class="bottom-blocks-main  "> 
+  
+<div class="page-blocks-bottom-div">
+  {% if section.settings.eight_points_narrow_column %}
+      <div style="margin: auto;" class="{% if section.settings.eight_points_narrow_column %} medium-up--three-quarters medium-up--push-one-eighth  medium-up--three-quarters-less medium-up--push-one-eighth-less{% endif %}">
+  {% endif %}
+   <div class="page-blocks-containers">
+        {% for block in section.blocks %}
+     
+     {% case block.type %}
+         
+      <div {{ block.shopify_attributes }} class="page-blocks-main-div">
+           
+          {% when 'rich-text-advanced' %}
+            {% include 'page-block-rich-text-advanced' %}
+           
+
+        {% endcase %}
+      </div>
+    {% endfor %}
+     </div>
+        </div>
+  {% if sections.settings.eight_points_narrow_column %}
+    </div>
+  {% endif %}
+</div>
+
+  </div>
+</div>
+</div>
+
+<style>
+.globo-form-app .globo-form-control input, .globo-form-app .globo-form-control select, .globo-form-app .globo-form-control textarea {
+  background-color: unset;
+}
+.globo-form-app.boxed-layout {
+  box-shadow: unset;
+}
+span.dark-font-color {
+    line-height: 2;
+}
+button.action.submit.classic_rounded-button {
+  background-color: unset;
+  color: #EB8342 ;
+  border-color: #EB8342; 
+    margin: auto;
+  display: block;
+    width: 200px;
+}
+</style>
+{% schema %} 
+  {
+    "name": "Contact Us Page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "page_title_enable",
+        "label": "Show page title",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "page_content_enable",
+        "label": "Show page content",
+        "default": true
+      }
+    ],
+    "default": {
+      "blocks": [
+        {
+          "type": "contact-form"
+        }
+      ]
+    },
+    "blocks": [
+      {
+        "type": "contact-form",
+        "name": "Contact form",
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "All submissions are sent to the customer email address of your store. [Learn more](https://help.shopify.com/en/manual/using-themes/change-the-layout/add-contact-form#view-contact-form-submissions)."
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_phone",
+            "label": "Show phone number"
+          },
+          {
+            "type": "checkbox",
+            "id": "narrow_column",
+            "label": "Narrow column",
+            "default": true
+          }
+        ]
+      },
+      
+      {
+        "type": "text-and-image",
+        "name": "Image With Text",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "range",
+            "id": "image_width",
+            "label": "Image width",
+            "default": 500,
+            "min": 100,
+            "max": 500,
+            "step": 10,
+            "unit": "px"
+          },
+          {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Subtitle",
+            "default": "Improved"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Image with text"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Pair large text with an image to tell a story, explain a detail about your product, or describe a new promotion.</p>"
+          },
+          
+          {
+            "type": "select",
+            "id": "layout",
+            "label": "Layout",
+            "default": "left",
+            "options": [
+              {
+                "value": "left",
+                "label": "Image on left"
+              },
+              {
+                "value": "right",
+                "label": "Image on right"
+              }
+            ]
+          }
+        ]
+      },
+      
+      
+      
+      {
+        "type": "rich-text-advanced",
+        "name": "Rich text advanced",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Rich text block"
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "Text",
+            "default": "<p>Use this section for any descriptive text you need to fill out your pages or to add introductory headings between other blocks.</p>"
+          },
+          {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone",
+            "default": "Rich Phone block"
+          },
+          {
+            "type": "text",
+            "id": "fax",
+            "label": "Fax",
+            "default": "Rich Fax block"
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "label": "email",
+            "default": "Rich Fax block"
+          },
+          {
+            "type": "select",
+            "id": "align_text",
+            "label": "Text alignment",
+            "default": "center",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Centered"
+              }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "id": "narrow_column",
+            "label": "Narrow column",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "enlarge_text",
+            "label": "Enlarge text"
+          }
+        ]
+      }
+      
+    ]
+
+  }
+{% endschema %}

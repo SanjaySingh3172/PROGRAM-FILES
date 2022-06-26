@@ -1,0 +1,119 @@
+<style>
+  @gutters: 10%;
+
+body {
+  
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+  
+  .slick-slide {
+    .slide-content{
+      margin: 0 @gutters;
+      padding: 50px 100px;
+      background: #fff;
+    }
+  }
+  
+  .slick-list {
+     margin: 20px 0px;
+  }
+  
+  .slick-prev,
+  .slick-next {
+    position: absolute;
+    right: @gutters;
+    background: #777;
+    border: none;
+    color: transparent;
+    width: 30px;
+    height: 30px;
+   
+    &:before { 
+      content: ">"; 
+      color: #fff; 
+      font-size: 25px;
+    }
+  }
+  
+  .slick-prev { 
+    left: @gutters; 
+    &:before { content: "<"; }
+  }
+  
+  .slick-dots {
+    list-style: none;
+    margin: 0 auto;
+    text-align: center;
+    
+    li {
+      display: inline-block;
+      
+      button { 
+        transition: 0.2s background-color ease-in-out 0s;
+        border: none;
+        padding: 0;
+        color: transparent;
+        
+        width: 10px;
+        height: 10px;
+        background-color: #777;
+        margin-right: 10px;
+        border-radius: 50%; 
+      }
+
+       &.slick-active button { background-color: #fff; }
+    }
+  }
+}
+  
+</style>  
+
+<div class="slick-carousel">
+  <div><div class="slide-content">1 your content</div></div>
+  <div><div class="slide-content">2 your content</div></div>
+  <div><div class="slide-content">3 your content</div></div>
+  <div><div class="slide-content">4 your content</div></div>
+  <div><div class="slide-content">5 your content</div></div>
+  <div><div class="slide-content">6 your content</div></div>
+  <div><div class="slide-content">7 your content</div></div>
+  <div><div class="slide-content">8 your content</div></div>
+  <div><div class="slide-content">9 your content</div></div>
+  <div><div class="slide-content">10 your content</div></div>
+</div>
+
+   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
+  
+  $(document).ready(function(){
+  
+    $('.slick-carousel').slick({
+    dots: true,
+    infinite: true,  
+    speed: 300,
+    slidesToShow: 4,
+    slidesToScroll: 3,
+      autoplay: true,
+  autoplaySpeed: 1000,
+   
+   
+  });
+
+
+});
+</script>
+
+{% schema %}
+  {
+    "name": "Slider",
+    "settings": []
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

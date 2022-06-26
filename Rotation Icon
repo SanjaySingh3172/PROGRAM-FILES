@@ -1,0 +1,25 @@
+
+<a href="#"><div class="fa fa-chevron-right rotate"></div></a>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+$(".rotate").click(function () {
+    $(this).toggleClass("down");
+})
+});
+</script>
+
+<style>
+.rotate {
+    -moz-transition: all .5s linear;
+    -webkit-transition: all .5s linear;
+    transition: all .5s linear;
+}
+.rotate.down {
+    -moz-transform:rotate(490deg);
+    -webkit-transform:rotate(490deg);
+    transform:rotate(490deg);
+}
+
+</style>

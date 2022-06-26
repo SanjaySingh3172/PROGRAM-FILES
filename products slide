@@ -1,0 +1,92 @@
+
+<div class="container">
+  <div class="limespot-box">
+    {% if section.settings.text_p %}
+<h3 class="ls-box-title">{{ section.settings.text_p }}</h3>
+   {% endif %}
+  <div class="limespot-recommendation-box-carousel-container">
+     <div class="ls-ul-container limespot-recommendation-box-carousel v-align">
+       
+       
+       <ul class="cslider ls-ul limespot-recommendation-box-carousel-shelf" >       
+         {% for product in collections[section.settings.products_featured_collection].products %} 
+         <li class="limespot-recommendation-box-item" >
+         
+ 			<a class="ls-link" href="{{ product.url }}">
+              
+              <div class="ls-image-wrap" >
+           <img class="ls-image" src="{{ product.featured_image | img_url:'1000x' }}" alt="{{ product.featured_image.alt }}">
+        	</div>
+                <div class="ls-info-wrap">
+              <div class="ls-title">{{ product.description}}</div>
+              <div class="ls-price-wrap">
+                  <span class="ls-original-price money" data-numeric-value="183.99" data-money-convertible="">{{ product.price  | money_with_currency}}</span>
+                 <span class="ls-price money ls-sale-price" data-numeric-value="89.9" data-money-convertible="">{{ product.compare_at_price  | money_with_currency}}</span>
+              </div>
+             
+              </div>
+            
+                <div class="yotpo-display-wrapper" > 
+ 
+                      <span class="yotpo-stars"> 
+                       <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        </span><span class="sr-only">4.7 star rating</span>   
+              </div>
+
+            </a>
+          
+       		</li>
+         {% endfor %}
+        </ul>
+    </div>
+  </div>
+  </div>
+</div>
+
+ <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript">
+ $(document).ready(function(){
+
+   $('.cslider').slick({
+    infinite: false,
+     arrows: true,
+    speed: 600,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    navigation: true,
+     prevArrow: '<a class="ls-left-arrow limespot-recommendation-box-carousel-indicator indicator-left"><div class="recomm-arrow arrow-left ls-svg-arrow" style="margin-top: 105px; display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 44.5 62.03"><path d="M5 .6a2 2 0 0 0-3 0L1 1.8a2 2 0 0 0 0 2.8l14.6 14.7a2 2 0 0 1 0 2.8L.6 37a2 2 0 0 0 0 3L2 41.3a2 2 0 0 0 3 0l19-19a2 2 0 0 0 0-2.8z"></path></svg></div></a>',
+     nextArrow: '<a class="ls-right-arrow limespot-recommendation-box-carousel-indicator indicator-right"><div class="recomm-arrow arrow-right ls-svg-arrow" style="margin-top: 105px; display: inline-block;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="-10 -10 44.5 62.03"><path d="M5 .6a2 2 0 0 0-3 0L1 1.8a2 2 0 0 0 0 2.8l14.6 14.7a2 2 0 0 1 0 2.8L.6 37a2 2 0 0 0 0 3L2 41.3a2 2 0 0 0 3 0l19-19a2 2 0 0 0 0-2.8z"></path></svg></div></a>',
+  	
+});
+});
+</script>
+{% schema %}
+ {
+    "name": "Collection",
+    "settings": [
+		  {
+          "type": "text",
+          "id": "text_p",
+          "label": {
+            "en": "text"
+          }
+        },
+	      {
+        "type": "collection",
+        "id": "products_featured_collection",
+        "label": {
+            "en": "Featured products in sidebar"
+          }
+        }
+	]
+  }
+
+
+{% endschema %}
+			

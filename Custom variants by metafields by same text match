@@ -1,0 +1,71 @@
+  <div class="options--color" style="display:none;">
+  <span class="p--handle">{{product.handle}}</span>
+{% assign colors = product.metafields.my_fields.colors | split: "," %}
+<ul class="color--names">
+  {% for color in colors %}
+  <li>{{ color }}</li>
+{% endfor %}
+  </ul>
+  {% assign colorsimages = product.metafields.my_fields.color_images | split: "," %}
+  <ul class="color--images">
+  {% for color_img in colorsimages %}
+    <li><div class="img--colo"><img src="{{ color_img }}"></div></li>
+{% endfor %}
+  </ul>
+  {% assign product_link = product.metafields.my_fields.product_links | split: "," %}
+<ul class="product--links">
+  {% for p_link in product_link %}
+  <li>{{ p_link }}</li>
+{% endfor %}
+  </ul>
+{% comment %}
+{{product.metafields.my_fields.product_links}}
+  {% endcomment %}
+</div>
+{% if product.metafields.my_fields.colors %}
+<div class="final--colors">
+  <span class="ProductForm__Label">
+              Color:</span>
+  <div class="append--here">
+  
+  </div>
+</div>
+{% endif %}
+
+<script>
+  var arr = [];
+  var handle = $(".p--handle").text();
+  //onsole.log(handle);
+  $("ul.color--names li").each(function(){
+  var find = $(this).text();
+    //console.log(find);
+    $("ul.color--images li").each(function(){
+      
+    var img = $(this).find("img").attr("src");
+      var result = img.includes(find);
+      
+     if ( result == true )
+     {
+       //console.log(result);
+      //console.log(img);
+       $("ul.product--links li").each(function(){
+    var links = $(this).text();
+      var result = links.includes(find);
+         var result2 = links.includes(handle);
+        
+      if ( result == true )
+     {
+       //console.log(result);
+      //console.log(links);
+        console.log(result2)
+       arr.push("<div class='image-and-color-name "+"link--border"+result2+"'><a class="+"link"+result2+" href="+ links +"><img src="+img+"><label class='color-name'>"+ find +"</label></a></div>")
+     }
+    }) 
+     }
+      
+    })
+   
+  })
+  //console.log(arr);
+  $(".append--here").html(arr);
+  </script>

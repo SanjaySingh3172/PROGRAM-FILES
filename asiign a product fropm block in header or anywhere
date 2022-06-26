@@ -1,0 +1,71 @@
+
+ 
+            {%- for block in section.blocks -%}   
+			{% if block.type == 'block-1' %}
+            {% if link.title == block.settings.heading_text  %}
+      <div class="site-nav__dropdown megamenu text-center">      
+      <div class="menu-image-wrapper">
+       
+  {%- assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+   {%- assign featured_image = product.featured_image -%}   
+        
+          	   <h5>{% comment %} {{ block.settings.heading_text }} {% endcomment %}</h5>
+            	
+                 <ul class="dropdown-data">
+                   <li> 
+                     {% if block.settings.selected_product != blank %}
+                     {%- assign product = all_products[block.settings.selected_product] -%}
+                     <p >{%- assign featured_image = product.featured_image -%}
+                       <img src="{{ featured_image | img_url:'100x'}}">
+                     </p>
+                     <a href="{{ product.url }}">{{ product.title }}</a>  
+                   
+                     {% endif %}
+                     </li>
+                   <li>
+                     {% if block.settings.selected_product_scnd != blank %}
+                     {%- assign product = all_products[block.settings.selected_product_scnd] -%}
+                     <p >{%- assign featured_image = product.featured_image -%}
+                       <img src="{{ featured_image | img_url:'100x'}}"> </p>
+                     <a href="{{ product.url }}">{{ product.title }}</a>  
+                     
+                     {% endif %}
+                   </li>
+                   <li> 
+                     {% if block.settings.selected_product_thrd != blank %}
+                     {%- assign product = all_products[block.settings.selected_product_thrd] -%}
+                     <p >{%- assign featured_image = product.featured_image -%}
+                       <img src="{{ featured_image | img_url: '100x'}}" alt="{{ featured_image.alt | escape }}"> </p>
+                     <a href="{{ product.url }}"> {{ product.title }}</a>  
+                    
+                     {% endif %}
+                     </li>
+                   <li> 
+                     {% if block.settings.selected_product_forth != blank %}
+                     {%- assign product = all_products[block.settings.selected_product_forth] -%}
+                     <p >
+                       {%- assign featured_image = product.featured_image -%}
+                       <img src="{{ featured_image | img_url: '100x'}}" alt="{{ featured_image.alt | escape }}"></p>
+                     <a href="{{ product.url }}">{{ product.title }}</a>  
+                     
+                     {% endif %}
+                     </li>
+                   <li>
+                     <div class="all-product"> 
+               {% if block.settings.see_all_url != blank %}    
+           		  <a href="{{ block.settings.see_all_url }}">{{ block.settings.see_all_text }}</a>
+                {% endif %}
+           		</div>
+                   </li>
+                 </ul>
+               
+            </div>
+      </div>
+             {% endif %}
+            {% endif %}
+    		 {% endfor %}
+      
+      
+      
+      
+      

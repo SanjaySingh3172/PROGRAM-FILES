@@ -1,0 +1,24 @@
+  $('.add_item').click(function(e){
+    e.preventDefault();
+    
+var product_id = $(this).attr('data-attr');
+    addItemToCart(product_id,1);
+  });
+  function addItemToCart(variant_id, qty) {
+    data = {
+      "id": variant_id,
+      "quantity": 1
+    }
+    
+    jQuery.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: data,
+      dataType: 'json',
+      success: function() { 
+        location.href = "/cart";
+
+      }
+    });
+ 
+  }

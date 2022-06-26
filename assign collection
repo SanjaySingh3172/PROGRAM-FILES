@@ -1,0 +1,35 @@
+ 
+ <div class="row collection-added">
+ 
+   {%- assign collection = collections[settings.fstcollection] -%}
+   {% if settings.fstcollection != blank%}   
+  <div class="col-md-4">
+   {%- assign featured_image = collection.img -%}
+    <div class="block-account block-order box-collection">
+        <a href="{{ collection.url }}">
+          <img src="{{ collection | img_url:'100x'}}">
+      </a> 
+      <a href="{{ collection.url }}">
+      <button class="collection-btn">Shop {{collection.title}}</button>
+      </a>  
+    </div>
+   </div>
+   {%endif%}
+  
+   {%- assign collection = collections[settings.scndcollection] -%}
+   {% if settings.scndcollection != blank%}   
+   <div class="col-md-4">
+  
+    <div class="block-account block-order box-collection">
+     <a href="{{ collection.url }}">
+       <img src="{{ collection | img_url:'100x'}}">
+      </a>
+      <a href="{{ collection.url }}">
+      <button class="collection-btn">Shop {{collection.title}}</button>
+      </a>  
+    </div>
+   </div>
+   {%endif%}
+ </div>
+ 
+  

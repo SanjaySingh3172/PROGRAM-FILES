@@ -1,0 +1,220 @@
+ //////////////  for cart 
+
+
+ 
+ 
+
+/////   for bundle page 
+
+ $(".quantity").change(function(){
+     var crntqty = $(this).val();
+     //alert(crntqty);
+   $(this).attr("value",crntqty);
+   }); 
+function addToCart() {
+   
+   var array = [];
+ $('input[type="checkbox"]:checked').each(function() {
+    
+   var qtty = $(this).parent("li.limespot-recommendation-box-item").find("#quantity").attr("value");
+    //alert(qtty);
+   var VarID = $(this).attr("variantid");
+   var toPushItem = VarID+'-'+qtty;
+          	array.push(toPushItem);
+   //alert(array);
+   
+   //array.push(VarID);
+});
+  
+ for(var i = 0; i <= array.length; i++) {
+    //console.log(array);
+   var formContents = array[i].split('-');
+   console.log(formContents);
+      {           
+          $.ajax({
+              type:"POST",
+              url:"/cart/add.js",
+            //data: 'quantity='+formContents[1]+'&id='+formContents[0],
+            data: 'quantity='+formContents[1]+'&id='+formContents[0],
+              async:false,
+              success:function(){
+                window.location.href = '/cart'; 
+           // alert("Item added to cart");
+              }
+            });
+      }
+ }
+}
+
+
+
+/////  for quick view page 
+$(".new-class").click(function(){
+  // $(this).parent(".sw-el-main").addClass("m");
+ //alert("ss");
+  });
+
+ $("input#Quantity-product-template").change(function(){
+     var crntqty = $(this).val();
+     //alert(crntqty);
+   $(this).attr("value",crntqty);
+   }); 
+
+$(".quick-view-btn").click(function(){
+   var clicked = $(this);
+  // alert(clicked);
+   $(this).parent(".hovered").find("#myModal").css("display","block");
+    $("div#myModal").css("display","block");
+  });
+  $("span.close").click(function(){
+    $("div#myModal").css("display","none");
+  });
+ 
+  // quick view 
+  $(".quick-view-btn, button#quick-view ").click(function(){
+    var title = $(this).attr("title");
+    var price = $(this).attr("price");
+    var compareprice = $(this).attr("compareprice");
+    var imgsrc = $(this).attr("imgsrc");
+    var options = $(this).attr("options"); 
+    var swatch = $(this).parent(".hovered").find(".swatches").html();
+   //console.log(swatch);
+    
+    $(".right-side-main.w-50 .quick-title").text(title);
+    $(".right-side-main.w-50 .quick-price").text(price);
+    $(".right-side-main.w-50 .quick-compare").text(compareprice);
+    $("img.quick-img").attr('src',imgsrc);
+    $(".modal-content .swatches-main.quick").html(swatch);
+  // to add in cart
+    var checked = $(this).attr("variant");
+    var qty = $("input#Quantity-product-template").val();
+    var btnid = 'addItemToCart('+checked+','+$("#Quantity-product-template").val()+')';
+  // console.log(checked);
+   $("input#add-to-cart-button").attr("onClick",btnid);
+   $("input#add-to-cart-button").attr('title',title); 
+   $("input#add-to-cart-button").attr('variantId',checked); 
+  // for select value fetch in modal  
+      var color = $(this).parent(".hovered").find(".product-form__controls-group").html();
+      $(".color-main").html(color);    
+// for quantity     
+    $("#Quantity-product-template").change(function(){ 
+      $(this).parent(".quick").parent(".w-50").parent(".content").parent(".modal-content").parent(".quick-view-modal").parent(".hovered").find(".quick-view-btn").trigger("click");
+      var valu = $(this).val();
+      $(this).attr("value",valu);
+      var variant = $(this).parent(".quick").parent(".right-side-main").find(".quick-view-btnn").attr("variantid");
+      // console.log(valu); console.log(variant);      
+      var colorvar = $(this).parent(".quick").parent(".right-side-main").find(".product-form__variants").val();
+      // console.log(colorvar);
+      var final = 'addItemToCart('+colorvar+','+valu+')';
+      // console.log(final);
+      $("input#add-to-cart-button").attr("onClick",final);
+  });
+    
+    
+    
+    
+///  for colour from dropdown /selectbox  
+     $(".product-form__variants").change(function(){ 
+      //alert("select");
+       var colorvariant = $(this).attr("value");
+        //console.log(valu);
+      $(this).parent(".selector-wrapper").parent(".quick").find(".selectbox").find(".quick-view-btn").trigger("click");
+      var valu = $(this).val();
+      $(this).attr("value",valu);
+      //console.log(valu);
+       var qtty = $(this).parent(".quick").parent(".right-side-main").find(".product-q").val();
+        //console.log(qtty);
+      var final = 'addItemToCart('+valu+','+qtty+')';
+      // console.log(final);
+      $("input#add-to-cart-button").attr("onClick",final);
+      
+      
+  });
+   
+    
+/////////  for color from swatches  
+    
+     jQuery('.swatch :radio').change(function() {
+    jQuery(this).parent(".swatch-element").addClass("selected");
+    jQuery(this).parent(".swatch-element").nextAll(".swatch-element").removeClass("selected");
+    jQuery(this).parent(".swatch-element").prevAll(".swatch-element").removeClass("selected");
+    var optionIndex = jQuery(this).closest('.swatch').attr('data-option-index');
+    var optionValue = jQuery(this).val();
+    //console.log(optionIndex);
+    console.log(optionValue);
+    jQuery(this)
+      .closest('form')
+      .find('.single-option-selector')
+      .eq(optionIndex)
+      .val(optionValue)
+      .trigger('change');
+    
+//////////////  
+       var qtty =  $(".quick.quantity-box input.product-q").val();
+       console.log(qtty);
+      var final = 'addItemToCart('+optionValue+','+qtty+')';
+       console.log(final);
+      $("input#add-to-cart-button").attr("onClick",final);
+       
+  });
+    
+    
+  });
+
+ 
+function addItemToCart(variant_id, qty) {
+   
+    data = {
+      "id": variant_id,
+      "quantity": qty,
+    }
+    jQuery.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: data,
+      dataType: 'json',
+      success: function() { 
+         window.location.href = '/cart'; 
+        //alert("Item Added Successfully to cart.");
+       // $("#mySidenav").css("display","block");
+  ///$("#mySidenav").css("width","400px");
+        // $("#mySidenav").load("/cart");
+      }
+    });
+      
+  }
+
+
+
+
+/////////////////////////   for product page 
+$(".swatch.clearfix li").click(function(){
+  var clrid = $(this).attr("varr");
+    $("#prdclr").val(clrid);
+});
+ 
+function ATC(prdtclrid, prdqty) {
+  var prdqty = $(".product-form__controls-group input#Quantity-product-template").val();
+  //alert(prdqty);
+  var prdtclrid = $("#prdclr").val();
+  //alert(prdtclrid);
+  
+    data = {
+      "id": prdtclrid,
+      "quantity": prdqty,
+    }
+    jQuery.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: data,
+      dataType: 'json',
+      success: function() { 
+         //window.location.href = '/cart'; 
+        //alert("Item Added Successfully to cart.");
+       $("#mySidenav").css("width","400px");
+        // $("#mySidenav").load("/cart");
+      }
+    });
+      
+  }
+

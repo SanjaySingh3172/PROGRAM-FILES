@@ -1,0 +1,100 @@
+<div class="mini-cart_etc-note">
+       <p class="cart-attribute__field">
+              <label for="makemodelyear">Please Enter Make, Model, Year, Size, Etc. to Ensure Correct Fitment</label>
+              <input required="" id="makemodelyear" class="makemodelyearinput" type="text" name="attributes[Make/Model/Year]" value="" autocomplete="off">
+            </p>
+      </div> 
+
+<script>
+  
+  $(document).ready(function(){
+  if ($("body").hasClass("mmyexist")) {
+    var cartcount = $("body").attr("data-cart");
+    $(".cart_count").text(cartcount);
+    console.log("test");
+  }
+  
+  $("form#cart_form input#checkout").click(function(e){
+    var val1 = $("input.makemodelyearinput").val();
+    if ( val1 == "" ){}
+    else
+    {
+      if ( $( ".tocheck" ).hasClass( "alreadyexist" ) ) {}
+      else{
+        e.preventDefault();
+        $(".submitattr_error").fadeIn();
+        setTimeout(function(){ $(".submitattr_error").fadeOut(); }, 2000);
+
+      }
+    }
+  })
+  
+  $(".submitattr").click(function(){
+
+    if ( $( ".tocheck" ).hasClass( "alreadyexist" ) ) {
+
+      var submitted_data = {quantity: 0,id:31889624825969}
+      $.ajax({
+        type: 'POST', 
+        url: '/cart/change.js',
+        dataType: 'json', 
+        data: submitted_data,
+        success: function(response){
+          var mmyinfo = $("input#makemodelyear").val();
+          if(mmyinfo == ''){}else{
+
+            var properties_list = {
+              "MMY Information":         mmyinfo,
+            }
+            var submitted_data = {quantity: 1,id:31889624825969,  properties:properties_list}
+            $.ajax({
+              type: 'POST', 
+              url: '/cart/add.js',
+              dataType: 'json', 
+              data: submitted_data,
+              success: function(response){
+                location.reload();
+
+              },
+              error:function(error){
+                alert('Something went wrong. Please try again.1');
+              }
+
+            });  
+          }
+        },
+        error:function(error){
+          alert('Something went wrong. Please try again.1');
+        }
+
+      });  
+
+
+    }
+    else {
+      var mmyinfo = $("input#makemodelyear").val();
+      if(mmyinfo == ''){}else{
+
+        var properties_list = {
+          "MMY Information":         mmyinfo,
+        }
+        var submitted_data = {quantity: 1,id:31889624825969,  properties:properties_list}
+        $.ajax({
+          type: 'POST', 
+          url: '/cart/add.js',
+          dataType: 'json', 
+          data: submitted_data,
+          success: function(response){
+            location.reload();
+          },
+          error:function(error){
+            alert('Something went wrong. Please try again.1');
+          }
+
+        });  
+
+      }
+    }
+  })  
+})
+    </script>  

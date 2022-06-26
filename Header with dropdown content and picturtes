@@ -1,0 +1,428 @@
+<div id="mySidenav" class="sidenav navpop">
+  <h1> my div</h1>
+ </div>
+
+<script>
+  $(".navclick").click(function(){
+$(".navpop").show();
+});
+</script>
+   <header class="header">
+    <div id="head-promo-banner" class="shop-coupon rv tc desktop">
+          
+<div class="bar-image">
+   {% if section.settings.firstimage !=blank %}
+  <img class="desktop-banner" src="{{section.settings.firstimage | img_url:'1000x'}}">
+ {% endif %}
+  </div>
+      
+  </div>
+    <div class="header-full">
+    <div class="top-bar">
+      <div class="container">
+        <div class="row">
+          <div class="top-link col-md-4 col-sm-3">
+             {% if section.settings.createtext !=blank %}
+            <a href="{{ section.settings.createurl }}" id="customer_register_link">{{ section.settings.createtext }}</a>|<a href="{{ section.settings.createurl1 }}" id="customer_login_link">{{ section.settings.createtext1 }}</a>
+         	{% endif %}
+          </div>
+          <div class="top-link top-ship col-md-4 col-sm-5 tc">
+           {% if section.settings.ftext !=blank %}
+            <p class="top-link"> {{ section.settings.ftext }}</p>
+            {% endif %}
+          </div>
+          <div class="top-link col-sm-4 tr">
+             {% if section.settings.contacttext !=blank %}
+           <a href="{{ section.settings.contacturl }}">{{ section.settings.contacttext }}</a> 
+            <!--  <a href="tel:8002562981"><i class="fa fa-phone"></i> call 800-256-2981</a> -->
+         	{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+      <!-- End Toolbar -->
+<div class="container">
+  <!-- Begin Head -->
+  <div class="head clearfix">    
+    <!-- Begin Logo -->
+    <div id="logo" class="site-logo">
+       {% if section.settings.sitelogo %}
+      <a href="{{ section.settings.sitelogourl }}"><img src="{{section.settings.sitelogo | img_url:'1000x'}}" alt="Blue Steel Jewelry"></a>
+      {% endif %}
+    </div>
+ 
+   <!-- End Logo -->    
+    <!-- Begin HeadRight -->
+    <div class="HeadRight tr"> 
+      <div class="row"> 
+        
+        <div class="head__inline">
+          
+          <div class="shop-bag pull-right navclick">
+             <a href="#" "> 
+              <span class="shop-cart-icon bag-blue"> <i class="fa fa-shopping-cart" aria-hidden="true"></i> </span>
+             </a>
+          </div>
+          
+          
+          
+          
+          
+          
+          
+          
+           <div class="shop-bag pull-right">
+            <a href="#">
+              <span class="shop-cart-icon bag-blue"> <i class="fa fa-heart-o" aria-hidden="true"></i> </span>
+            </a>
+          </div>
+           <div class="shop-bag pull-right">
+            <a href="#">
+              <span class="shop-cart-icon bag-blue"> <i class="fa fa-phone" aria-hidden="true"></i> </span>
+            </a>
+          </div>  
+          <div class="shop-search pull-right">
+            <form class="search" action="/pages/search-results" method="get">
+              <span role="status" aria-live="polite" class="isp_polite_powered_by_id ui-helper-hidden-accessible"></span>
+              <input type="text" name="q" placeholder="Search Keyword" value="" id="ispbxii_0" autocomplete="OfF" autocorrect="off" autocapitalize="off" aria-label="Search" aria-autocomplete="list" class="ui-autocomplete-input" isp_ac="OfF">
+              <button type="submit" id="go"><i class="fa fa-search"></i></button>
+            </form>
+          </div>
+           
+        </div>
+        
+        
+ <nav id="newMenu" class="bbs_t05_menu clearfix">
+     <div class="inner-wrapper">
+  <ul>
+    {%- for link in linklists[section.settings.main_linklist].links -%}
+      <li>
+        <a class="custom-menu-title " href="{{ link.url }}" {% if link.active %}aria-current="page"{% endif %}>
+          {{ link.title }}
+        </a>
+		
+         {%- if link.links != blank -%}
+        <div class="dropdown-content">
+          <ul class="dropdown-menu">
+			<div class="menu-block-wrapper">
+            {%- for child_link in link.links -%}
+             <div class="menu-block"> 
+			
+				
+                <h5 {% if child_link.active %}aria-current="page"{% endif %}>
+                  {{ child_link.title }}
+                
+              </h5>
+                {%- if child_link.links != blank -%}
+                  <ul class="price-data">
+                    {%- for grandchild_link in child_link.links -%}
+                      <li>
+                        <a href="{{ grandchild_link.url }}" {% if grandchild_link.active %}aria-current="page"{% endif %}>
+                          {{ grandchild_link.title }}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}    
+			</div>
+            {%- endfor -%}
+            </div>
+          
+            {%- for block in section.blocks -%}   
+			{% if block.type == 'block-2' %}
+            {% if link.title == block.settings.menu-title %}
+            <div class="menu-image-wrapper">
+               {% if block.settings.title_heading %}
+          	   <h5>{{ block.settings.title_heading }}</h5>
+            	 {% endif %}
+                 <ul class="customer-data">
+                   <li>
+                     {% if block.settings.image %}
+                     <a href="{{ block.settings.imageurl }}">
+                     <img src="{{block.settings.image | img_url:'1000x'}}">
+                     <span>{{ block.settings.text }}</span>
+                     </a>
+                     {% endif %}
+                     </li>
+                   <li>
+                      {% if block.settings.image2 %}
+                     <a href="{{ block.settings.imageurl2 }}">
+                     <img src="{{block.settings.image2 | img_url:'1000x'}}">
+                     <span>{{ block.settings.text2 }}</span>
+                     </a>
+                     {% endif %}
+                   </li>
+                   <li>
+                    {% if block.settings.image3 %}
+                     <a href="{{ block.settings.imageurl3 }}">
+                     <img src="{{block.settings.image3 | img_url:'1000x'}}">
+                     <span>{{ block.settings.text3 }}</span>
+                     </a>
+                     {% endif %}
+                   </li>
+                   <li>
+                     {% if block.settings.image4 %}
+                     <a href="{{ block.settings.imageurl4 }}">
+                     <img src="{{block.settings.image4 | img_url:'1000x'}}">
+                     <span>{{ block.settings.text4 }}</span>
+                     </a>
+                     {% endif %}
+                   </li>
+                 </ul>
+               <div class="all-product">
+               {% if block.settings.text5 %}    
+           		  <a href="{{ block.settings.text_a }}">{{ block.settings.text5 }}</a>
+                {% endif %}
+           		</div>
+            </div>
+             {% endif %}
+            {% endif %}
+    		 {% endfor %}
+            
+          </ul>
+           </div>
+        	
+        {%- endif -%} 
+       
+      </li>
+    {%- endfor -%}
+      
+  </ul>
+       
+    </div>
+</nav>   
+      </div>
+     </div>
+   </div>
+   </div>
+  </div>
+</header>
+
+
+
+{% schema %}
+  {
+    "name": "HEADER",
+    "settings": [
+	 {
+          "type": "image_picker",
+          "id": "firstimage",
+          "label": {
+            "en": "first image"
+          }
+        },
+		 {
+          "type": "text",
+          "id": "createtext",
+          "label": {
+            "en": "create text"
+          }
+        },
+			{
+          "type": "url",
+          "id": "createurl",
+          "label": {
+            "en": "create url"
+          }
+        },
+		{
+          "type": "text",
+          "id": "createtext1",
+          "label": {
+            "en": "create text"
+          }
+        },
+			{
+          "type": "url",
+          "id": "createurl1",
+          "label": {
+            "en": "create url"
+          }
+        },
+		  {
+          "type": "text",
+          "id": "ftext",
+          "label": {
+            "en": "link text"
+          }
+        },
+		{
+          "type": "text",
+          "id": "contacttext",
+          "label": {
+            "en": "contact text"
+          }
+        },
+			{
+          "type": "url",
+          "id": "contacturl",
+          "label": {
+            "en": "contact url"
+          }
+        },
+		 {
+          "type": "image_picker",
+          "id": "sitelogo",
+          "label": {
+            "en": "site logo"
+          }
+        },
+			{
+          "type": "url",
+          "id": "sitelogourl",
+          "label": {
+            "en": "sitelogo url"
+          }
+        },
+		
+	      {
+        "type": "link_list",
+        "id": "main_linklist",
+        "label": {
+            "en": "Menu"
+          }
+        }
+		
+
+	],
+ "blocks": [
+		 {
+      "type": "block-2",
+      "name": {
+       
+        "en": "column"
+      },
+   
+      "settings": [
+		{
+          "type": "text",
+          "id": "menu-title",
+          "label": {
+            "en": "Menu Title"
+          }
+
+		},
+      	{
+          "type": "text",
+          "id": "title_heading",
+          "label": {
+            "en": "Heading"
+          }
+        },
+		  {
+          "type": "url",
+          "id": "imageurl",
+          "label": {
+            "en": "Image url"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": {
+           
+            "en": "Image"
+          }
+        },
+		{
+          "type": "text",
+          "id": "text",
+          "label": {
+            "en": "img_text"
+          }
+        }
+		,
+		  {
+          "type": "url",
+          "id": "imageurl2",
+          "label": {
+            "en": "Image url"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": {
+           
+            "en": "Image"
+          }
+        },
+		{
+          "type": "text",
+          "id": "text2",
+          "label": {
+            "en": "img_text"
+          }
+        }
+		,
+		  {
+          "type": "url",
+          "id": "imageurl3",
+          "label": {
+            "en": "Image url"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "image3",
+          "label": {
+           
+            "en": "Image"
+          }
+        },
+		{
+          "type": "text",
+          "id": "text3",
+          "label": {
+            "en": "img_text"
+          }
+        }
+		,
+		  {
+          "type": "url",
+          "id": "imageurl4",
+          "label": {
+            "en": "Image url"
+          }
+        },
+        {
+          "type": "image_picker",
+          "id": "image4",
+          "label": {
+           
+            "en": "Image"
+          }
+        },
+		{
+          "type": "text",
+          "id": "text4",
+          "label": {
+            "en": "img_text"
+          }
+        },
+		{
+          "type": "text",
+          "id": "text5",
+          "label": {
+            "en": "all-product"
+          }
+        },
+		{
+          "type": "url",
+          "id": "text_a",
+          "label": {
+            "en": "all-product-url"
+          }
+        }
+		     
+      ]
+    }
+  ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

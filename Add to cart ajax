@@ -1,0 +1,33 @@
+// for cart page scissors 
+$(document).ready(function() {  
+  var variant = $("select#SingleOptionSelector-0").val();
+  $("button.btn.product-form__cart-submit").attr("varid",variant); 
+$("select#SingleOptionSelector-0").change(function(){
+  var value = $(this).val();
+  $("button.btn.product-form__cart-submit").attr("varid",value); 
+ // alert(value);
+  
+   });   
+  
+$("#cartscissor").click(function(event){
+  var idmain = $("button.btn.product-form__cart-submit").attr("varid");
+ //  console.log(idmain);
+  event.preventDefault();
+     
+      $.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      data: {
+          quantity: 1,
+          id: $(this).attr("varid")
+        },
+          dataType: 'json', 
+         success: function (data) { 
+          //alert("Item Added");
+           $("form.cart").load("https://cottonclara.com/cart form.cart");
+           $(".cc-scissors").hide();
+         } 
+       });
+      });
+
+});  

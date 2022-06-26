@@ -1,0 +1,296 @@
+<div class="servicepage product-container {% if section.settings.show_wishlist_border %}addbordercolor{% endif %}">
+  <div class="product-images">
+    <div class="main-image">
+      <img src="{{ product.featured_image | product_img_url | split:"_small" }}">
+    </div>
+    <div class="product-thumb">
+      {% for media in product.media %}
+      <div class="product-item">
+        <img src="{{ media | img_url | split:"_small" }}">
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="product-info">
+    {% comment %}
+    <div class="subtitle">
+      <span>{{ section.settings.subtitle }}</span>
+    </div>
+    {% endcomment %}
+    <div class="product-title">
+      <h1>{{ product.title }}</h1>
+    </div>
+
+    <div class="product-description">
+      {{ product.description }}
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="infromation">
+    <!--     <div class="info-headings">
+<div class="left-heading">
+{{ section.settings.left-heading }}
+</div>
+<div class="right-heading">
+{{ section.settings.right-heading }}
+</div>
+</div> -->
+    <div class="info-content">
+      <div class="left-content">
+        <div class="left-heading text-head">
+          {{ section.settings.left-heading }}
+        </div>
+        <ul>
+          <li><span class="icon1 addr"></span>{{ section.settings.address}} {{ product.metafields.global.vendor_address }}</li>
+          <li><span class="icon1 phn"></span>{{ section.settings.phone }} {{ product.metafields.global.vendor_phone }}</li>
+          <li><span class="icon1 website"></span>{{ section.settings.website }} {{ product.metafields.global.vendor_website }}</li>
+        </ul>
+      </div>
+      <div class="right-content">
+        <div class="right-heading text-head">
+          {{ section.settings.right-heading }}
+        </div>
+        <ul>
+          <li><span class="icon1 check"></span>{{ section.settings.reason }} {{ product.metafields.global.vendor_reason01 }}</li>
+          <li><span class="icon1 check"></span>{{ section.settings.reason1 }} {{ product.metafields.global.vendor_reason02 }}</li>
+          <li><span class="icon1 check"></span>{{ section.settings.reason2 }} {{ product.metafields.global.vendor_reason03 }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="google-map">
+    {{ product.metafields.global.vendor_map }}
+  </div>
+
+
+  <div class="enquiry-form">
+    <div class="divider">
+      <span class="in-text">{{ section.settings.form-heading }}</span>
+    </div>
+    <div class="form-vertical f-secondary">
+      {% form 'contact' %}
+
+      {% comment %}
+      Successful message
+      {% endcomment %}
+      {% if form.posted_successfully? %}
+      <p class="note form-success">
+        {{ 'contact.form.post_success' | t }}
+      </p>
+      {% endif %}
+
+      {{ form.errors | default_errors }}
+      <div class="form-name">
+        <div class="first">
+          {% assign name_attr = 'contact.form.name' | t | handle %}
+          <label for="ContactFormName" class="hidden-label f--main block mt2">First Name <span class="imp">*</span></label>
+          <input required type="text" id="ContactFormName" class="full--w input-underline input-underline--primary" name="contact[First name]"  autocapitalize="words" value="">
+        </div>
+        <div class="last">
+          <label for="ContactFormName" class="hidden-label f--main block mt2">Last name <span class="imp">*</span></label>
+          <input required type="text" id="ContactFormName" class="full--w input-underline input-underline--primary" name="contact[Last name]"  autocapitalize="words" value="">
+        </div>
+      </div>
+
+      <div class="form-email">
+        <label for="ContactFormEmail" class="hidden-label f--main block mt2">{{ 'contact.form.email' | t }} <span class="imp">*</span></label>
+        <input required type="email" id="ContactFormEmail" class="full--w input-underline input-underline--primary" name="contact[email]"  autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}">
+      </div>
+
+      <div class="form-phone">
+        {% assign name_attr = 'contact.form.phone' | t | handle %}
+        <label for="ContactFormPhone" class="hidden-label f--main block mt2">{{ 'contact.form.phone' | t }} <span class="imp">*</span></label>
+        <input required type="tel" id="ContactFormPhone" class="full--w input-underline input-underline--primary" name="contact[{{ name_attr }}]"  pattern="[0-9\-]*" value="{% if form[name_attr] %}{{ form[name_attr] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+      </div>
+      
+      <div class="form-wedding-date">
+        <label for="ContactFormweddingdate" class="hidden-label f--main block mt2">Expected Wedding Date <span class="imp">*</span></label>
+<!--         <input required placeholder="DD/MM/YYYY" type="text" id="ContactFormweddingdate" class="full--w input-underline input-underline--primary" name="contact['Expected Wedding Date']"> -->
+        <input type="date" id="ContactFormDate" class="full--w input-underline input-underline--primary" 
+                   name="contact[Expected Wedding Date]" placeholder="" autocapitalize="words" value=""required>
+      </div>
+
+      <div class="form-msg">
+        <label for="ContactFormMessage" class="hidden-label f--main block my2">{{ 'contact.form.message' | t }} <span class="imp">*</span></label>
+        <textarea required rows="10" id="ContactFormMessage" class="full--w input-underline input-underline--primary input-underline--textarea" name="contact[body]" >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+      </div>
+
+      <div class="hidden" style="display:none;">
+        <input type="text" name="contact[Product info]" value="https://{{ shop.domain }}{{ product.url }}">
+      </div>
+      <div class="form-check">
+        <label  class="">Check to enter to win a Wedding Photography package (T&amp;Cs)</label>
+        <label class="" >
+          <input type="checkbox" name="contact[Checkbox]" value="Checked" class="">
+          <span><i>Yes! I'd like to enter to win a Wedding Photography package!!</i></span>
+        </label>
+      </div>
+
+      <div class="form-btn">
+        <button type="submit" class="btn global__button hv-bg--main-accent" value="{{ 'contact.form.send' | t }}">
+          <span class="icon1 submit"></span>
+          Submit
+        </button>
+      </div>
+      {% endform %}
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+{% schema %}
+{
+"name": "Product Service Template",
+"settings": [
+{
+"type": "checkbox",
+"id": "show_wishlist_border",
+"label": "Add wishlist button border"
+},
+{
+"type": "color",
+"id": "wishlist_border_color",
+"label": "Wishlist button border color"
+},
+{
+"type":"header",
+"content":"information"
+},
+{
+"type":"text",
+"id":"left-heading",
+"label":"Left Heading"
+},
+{
+"type":"text",
+"id":"address",
+"label":"Address"
+},
+{
+"type":"text",
+"id":"phone",
+"label":"Phone"
+},
+{
+"type":"text",
+"id":"website",
+"label":"Website"
+},
+{
+"type":"text",
+"id":"right-heading",
+"label":"Right Heading"
+},
+{
+"type":"text",
+"id":"reason",
+"label":"Reason 1"
+},
+{
+"type":"text",
+"id":"reason1",
+"label":"Reason 2"
+},
+{
+"type":"text",
+"id":"reason2",
+"label":"Reason 3"
+},
+{
+"type":"header",
+"content":"Form"
+},
+{
+"type":"text",
+"id":"form-heading",
+"label":"Heading"
+}
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+<script>
+  $(".product-thumb").slick({
+    dots: false,
+    infinite: false,
+    arrows: true,
+    prevArrow:"<span class='icon1 icon-left'></span>",
+    nextArrow:"<span class='icon1 icon-right'></span>",
+    draggable:false,
+    speed: 300,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: false,
+          dots: false
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2
+        }
+      }
+      // You can unslick at a given breakpoint now by adding:
+      // settings: "unslick"
+      // instead of a settings object
+    ]
+  });
+
+
+  $(".product-item").on("click",function(){
+    var img = $(this).find("img").attr("src");
+    $(".main-image").find("img").attr("src",img);
+
+  });
+</script>
+<style>
+  p.global__shop_secondary.font-size--sm.t--meta.f--main.m0 {
+    display: none;
+  }
+  .resp-img-wrapper.js .resp-img
+  {
+    height:100%;
+  }
+  .addbordercolor .product-info .listfully__add__wrapper button#listfully-addBtn {
+    text-align: center !important;
+    border: 2px solid {{ section.settings.wishlist_border_color }} !important;
+    justify-content: center !important;
+  }
+  div#shopify-section-product-service-template .google-map iframe {
+    width: 100%;
+  }
+</style>

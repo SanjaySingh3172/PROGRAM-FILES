@@ -1,0 +1,8 @@
+ $(".main-nav__wrapper a.url-deadlink.dropdown_link").hover(
+  function () {
+    $(this).addClass("active_link");
+  },
+  function () {
+    $(this).removeClass("active_link");
+  }
+);

@@ -1,0 +1,46 @@
+  <script>
+      {{ settings.custom_scripts }}
+    </script>
+    
+    <div class="image-popup" style="display:none;">
+      <img src="">
+    </div>
+    <style>
+      .image-popup {
+          position: fixed;
+          top: 15%;
+          width: 500px;
+          height: 500px;
+          left: 15%;
+          z-index: 9999;
+      }
+      .image-popup img {
+          width: 100%;
+      }
+    </style>
+    <script>
+      var optionset = setInterval(opt, 1000);
+      function opt() {
+        var length = $(".dpo_dd_mask").length;
+        if(length > 1)
+        {
+          clearInterval(optionset);
+          $(".dpo_dd_mask").on("click",function(){
+        
+          $(".dpo_dd_list_preview").hover(function(){
+            var img =  $(this).find("img").attr("src");
+            $(".image-popup img").attr("src",img);
+            $(".image-popup").show();
+            }, function(){
+            $(".image-popup").hide();
+          });
+          
+        });
+        }
+        else
+        {
+          console.log(length);
+        }
+          
+      }
+    </script>

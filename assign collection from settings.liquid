@@ -1,0 +1,25 @@
+  <ul class="cslider ls-ul limespot-recommendation-box-carousel-shelf" >       
+         {% for product in collections[section.settings.products_featured_collection].products %} 
+         <li class="limespot-recommendation-box-item" >
+         
+ 			<a class="ls-link" href="{{ product.url }}">
+              
+              <div class="ls-image-wrap" >
+           <img class="ls-image" src="{{ product.featured_image | img_url:'1000x' }}" alt="{{ product.featured_image.alt }}">
+        	</div>
+                <div class="ls-info-wrap">
+              <div class="ls-title">{{ product.description}}</div>
+              <div class="ls-price-wrap">
+                  <span class="ls-original-price money" data-numeric-value="183.99" data-money-convertible="">{{ product.price  | money_with_currency}}</span>
+                 <span class="ls-price money ls-sale-price" data-numeric-value="89.9" data-money-convertible="">{{ product.compare_at_price  | money_with_currency}}</span>
+              </div>
+             
+              </div>
+            
+          
+
+            </a>
+          
+       		</li>
+         {% endfor %}
+        </ul>

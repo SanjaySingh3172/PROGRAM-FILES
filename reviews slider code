@@ -1,0 +1,172 @@
+<div class="module-block module-collection clearfix" >
+  <div id="carousel-top-panel"> 
+    {% if section.settings.createtext !=blank %}
+    <p class="headline" >{{ section.settings.createtext }} 
+  	   <span >
+  <button class="lefts"><i class="fa fa-angle-left" style="font-size:36px"></i></button>
+<button class="rights"><i class="fa fa-angle-right" style="font-size:36px"></i></button>
+  </span>
+      <span class="num-of-reviews"> 687 Reviews </span>
+      <span class="yotpo-stars"> 
+         <span class="fa fa-star checked"></span>
+         <span class="fa fa-star checked"></span>
+         <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+      </span>
+      
+    
+    </p>
+    {% endif %}
+  </div>
+ 
+	<div class="item-list lslider">
+     {%- for block in section.blocks -%}   
+		{% if block.type == 'text_block' %}
+  	<div class="lists ">
+          <div class="stars-container">
+     	 <span class="yotpo-stars"> 
+         <span class="fa fa-star checked"></span>
+         <span class="fa fa-star checked"></span>
+         <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+        <span class="fa fa-star checked"></span>
+   		 </span> 
+        
+      <span class="carousel-review-date" > 05/14/21 </span>
+      </div> 
+           {% if block.settings.title_heading %}     
+     		 <span class="review-title" > {{ block.settings.title_heading }} </span> 
+         {% endif %} 
+         {% if block.settings.firstimage %}
+      <div class="product-container">
+         <a class="product-link-container" href="{{ block.settings.firstlinkurl }}" >
+               <img src="{{block.settings.firstimage | img_url:'1000x'}}" >
+             {% endif %} 
+              {% if block.settings.text %}
+             <p class="product-name carousel-review-product-text">{{ block.settings.text }}</p>
+         </a>
+        <div class="sub-heading">
+          <span class="review-data">
+          	{% if block.settings.html %}     
+          <p class="carousel-review-body ">{{ block.settings.html }}</p>
+            {% endif %} 
+                 {% if block.settings.text_p %}
+          <p class="carousel-review-author">{{ block.settings.text_p }}</p> 
+            {% endif %} 
+          </span>
+        </div>
+      </div>
+       {% endif %} 
+     </div>
+      {% endif %}
+      {% endfor %}
+  </div>
+</div>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script>
+  $(document).ready(function(){
+    $( ".lefts" ).on( "click", function() {
+    $( ".slick-prev" ).trigger( "click" ); 
+});
+$( ".rights" ).on( "click", function() {
+    $( ".slick-next" ).trigger( "click" ); 
+});
+    
+  });  
+</script>
+<script type="text/javascript">
+ $(document).ready(function(){
+
+  
+   $('.lslider').slick({
+    infinite: true,
+     arrows: true,
+    speed: 600,
+     autoplay: true,
+  autoplaySpeed: 5000,
+    slidesToShow: 3,
+    slidesToScroll: 1
+   
+});
+});
+</script>
+{% schema %}
+{
+  "name": {
+    "en": "reviews"
+  },
+  "settings": [
+	{
+          "type": "text",
+          "id": "createtext",
+          "label": {
+            "en": "Main Heading"
+          }
+        }
+],
+	 "blocks": [
+		 
+	{
+      "type": "text_block",
+      "name": {
+       
+        "en": "column"
+      },
+   
+      "settings": [
+			{
+          "type": "text",
+          "id": "title_heading",
+          "label": {
+            "en": "Heading"
+          }
+        },
+		 {
+          "type": "image_picker",
+          "id": "firstimage",
+          "label": {
+            "en": "first image"
+          }
+        },
+       {
+          "type": "text",
+          "id": "text",
+          "label": {
+            "en": "first link text"
+          }
+        },
+      {
+          "type": "url",
+          "id": "firstlinkurl",
+          "label": {
+            "en": "first link url"
+          }
+        },
+
+		{
+          "type": "text",
+          "id": "html",
+          "label": {
+            "en": "html"
+          }
+        },
+      
+		{
+          "type": "text",
+          "id": "text_p",
+          "label": {
+            "en": "text"
+          }
+        }
+		     
+      ]
+    }
+
+
+  ]
+
+}
+{% endschema %}

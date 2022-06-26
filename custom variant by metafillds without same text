@@ -1,0 +1,163 @@
+
+<div class="options--color variant-wrapper js custom-variants" style="display:none;">
+  <span class="p--handle">{{product.handle}}</span>
+{% assign colors = product.metafields.my_fields.color_1 | split: "," %}
+<ul class="color--names clr-variants-main">
+  {% for color in colors %}
+  <li>{{ color }}</li>
+{% endfor %}
+  </ul>
+  {% assign colorsimages = product.metafields.my_fields.color_1_image | split: "," %}
+  <ul class="color--images clr-variants-main">
+  {% for color_img in colorsimages %}
+    <li><div class="img--colo"><img src="{{ color_img}}" realatt='{{ color_img | split:">" | last}}'></div></li>
+{% endfor %}
+  </ul>
+  {% assign product_link = product.metafields.my_fields.color_1_product_link | split: "," %}
+<ul class="product--links clr-variants-main">
+  {% for p_link in product_link %}
+  <li realli='{{p_link | split:">" | last}}'>{{ p_link }}</li>
+{% endfor %}
+  </ul>
+{% comment %}
+{{product.metafields.my_fields.product_links}}
+  {% endcomment %}
+</div> 
+
+{% if product.metafields.my_fields.color_1 %}
+<div class="final--colors variant-wrapper js custom-variants"> 
+  <label class="ProductForm__Label">Color: <span class="title">{{product.title | split:"-" | first}} | <span class="clrselected"></span></span></label>
+  <div class="append--here">
+  
+  </div>
+</div>
+{% endif %}
+
+
+
+$(document).ready(function(){
+  
+//   $(".variant-input").each(function(){
+//   //console.log("run");
+//   if($(this).find("input").attr("checked")){   
+//   $(this).addClass("selected");
+//     $(this).find("a").find(".variant__button-label").addClass("selected");
+//   }else{
+//       //$(this).addClass("this not");
+//   }
+// });
+
+
+
+
+
+
+
+
+////
+ 
+  var arr = [];
+  var handle ='';
+   //console.log(handle);
+  $("ul.color--names li").each(function(){
+    //const removed = str.split('_')[0];
+    //console.log(str);
+
+  //const find = strr.split('_')[0];
+    var find = $(this).text();
+     console.log(find);
+    $("ul.color--images li").each(function(){
+      
+    var img = $(this).find("img").attr("src");
+      //var not = "invalidaddress";
+      var result = img.includes("color_"+find);
+      img = img.substring(img.indexOf(">") + 1);
+     if ( result == true)
+     {
+       // console.log(result);
+       //console.log(img);
+       $("ul.product--links li").each(function(){
+    var links = $(this).text();
+      var result = links.includes("color_"+find);
+         var result2 = '';
+        //links = />(.+)/.exec(links)[1];
+         links = links.substring(links.indexOf(">") + 1);
+      if ( result == true )
+     {
+        //console.log(result);
+       //console.log(links);
+       // console.log(result2)
+       arr.push("<div class='image-and-color-name "+"link--border"+result2+"' colorsel='"+find+"'><a class="+"link"+result2+" href="+ links +"><img src="+img+"><label class='color-name'>"+ find +"</label></a></div>")
+     }
+    }) 
+     }
+      
+    })
+   
+  })
+  // console.log(arr);
+  $(".append--here").html(arr);
+
+// $(".append--here .image-and-color-name").hover(function(){
+//     var clrname = $(this).find("a").find(".color-name").html();
+//     //console.log(clrname);
+//    $(".final--colors.variant-wrapper.js.custom-variants span.clrselected").html(clrname);
+  
+// }); 
+  $(".append--here .image-and-color-name").hover(function(){
+    var clrname = $(this).find("a").find(".color-name").html();
+    console.log(clrname);
+   $(".final--colors.variant-wrapper.js.custom-variants span.clrselected").html(clrname);
+    
+  }, function(){
+    var defaultclr = $(".image-and-color-name.link--bordertrue.selected a.linktrue label.color-name").html();
+   $(".final--colors.variant-wrapper.js.custom-variants span.clrselected").html(defaultclr);
+});
+
+  var pageURL = $(location).attr("href");
+            console.log(pageURL);
+
+$(".image-and-color-name").each(function(){
+  console.log("run");
+  var color = $(this).attr("colorsel");
+  var url = $(location).attr("href");
+  var final = url.includes(color)
+  console.log(final);
+  if( final == true ){   
+  $(this).addClass("selected");
+   var getselected = $(".image-and-color-name.link--border.selected label.color-name").text();
+    //$(".clrselected").text(getselected);
+  }else{
+      //$(this).addClass("this not");
+  }
+});
+  var defaultclr = $(".image-and-color-name.link--bordertrue.selected a.linktrue label.color-name").html();
+   $(".final--colors.variant-wrapper.js.custom-variants span.clrselected").html(defaultclr);
+  $(".image-and-color-name.link--border").hover(function(){
+  $(this).addClass("selected");
+    $(this).prevAll(".image-and-color-name.link--border").removeClass("selected");
+    $(this).nextAll(".image-and-color-name.link--border").removeClass("selected");
+  }) 
+ 
+//   $(".image-and-color-name.link--border").on("click", function(){
+//     var get = $(this).find("label.color-name").text();
+//   localStorage.setItem("color", get);
+//   })
+//   var local = localStorage.getItem("color");
+//   console.log(local)
+//   if ( local != "" || local != undefined )
+//   {
+//     console.log("inlocal")
+//   $(".image-and-color-name.link--border[colorsel='"+local+"']").addClass("selected");
+//     $(".image-and-color-name.link--border[colorsel='"+local+"']").prevAll(".image-and-color-name.link--border").removeClass("selected");
+//     $(".image-and-color-name.link--border[colorsel='"+local+"']").nextAll(".image-and-color-name.link--border").removeClass("selected");
+//   }
+//   else
+//   {
+//     console.log("outlocal")
+//    $(".image-and-color-name.link--border:first-child").addClass("selected");
+  
+//   }
+  var getselected = $(".image-and-color-name.link--border.selected label.color-name").text();
+    $(".clrselected").text(getselected);
+});
